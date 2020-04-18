@@ -18,8 +18,20 @@ spec:
         app: k8s-demo-app
     spec:
       containers:
-      - image: k8s-demo-app:0.0.1-SNAPSHOT
+      - image: ccr.ccs.tencentyun.com/kioyong/k8s-demo-app:latest
         name: k8s-demo-app
         imagePullPolicy: IfNotPresent
         resources: {}
+        lifecycle:
+          preStop:
+            exec:
+              command: ["sh", "-c", "sleep 10"]
+        livenessProbe:
+          httpGet:
+            port: 8080
+            path: /actuator/health/liveness
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /actuator/health/readiness
 status: {}
